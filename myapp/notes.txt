@@ -1,0 +1,78 @@
+>>> from myapp.models import Book
+
+filter(cond1,cond2,...condn)
+-------------------------------
+
+>>> data=Book.objects.filter(name__istartswith='a',price__gt=250)
+>>>
+>>> for i in data:
+...     print(i.name,i.price,i.authorName)
+
+
+
+ref=queryset1 & queryset2
+-----------------------------
+...
+>>> data=Book.objects.filter(authorName__icontains='A') & Book.objects.filter(price__gt=100) 
+>>> 
+>>> for i in data:
+...     print(i.name,i.price,i.authorName)
+
+
+filter(Q(cond) & Q(cond))
+--------------------------
+
+>>> from django.db.models  import Q 
+>>> data1=Book.objects.filter(Q(name__icontains='e')& Q(price__lte=500))
+>>> 
+>>> for i in data1:
+...     print(i.name,i.price,i.authorName)
+
+
+
+or operator in ORM:
+--------------------
+1) ref= queryset1 | queryset2
+
+2) ref= filter(Q(cond)|Q(cond))
+
+
+1) ref= queryset1 | queryset2
+------------------------------
+
+>>> data=Book.objects.filter(name__istartswith='D')| Book.objects.filter(name__istartswith='H')
+>>>
+>>> for i in data:  
+...     print(i.name,i.price,i.authorName)
+
+2) ref= filter(Q(cond)|Q(cond))
+-----------------------------------
+
+>>> data=Book.objects.filter(Q(name__istartswith='D')|Q(name__istartswith='H'))
+>>>
+>>> for i in data:
+...     print(i.name,i.price,i.authorName)
+
+
+not operator in ORM:
+---------------------
+
+1) exclude(cond)
+
+2) filter(~Q(cond))
+
+1) exclude(cond)
+----------------------
+
+>>> data=Book.objects.exclude(name__istartswith='h') 
+>>>
+>>> for i in data:
+...     print(i.name,i.price,i.authorName)
+
+2) filter(~Q(cond))
+-------------------
+>>> data=Book.objects.filter(~Q(name__istartswith='h'))
+>>>
+>>> for i in data:
+...     print(i.name,i.price,i.authorName)
+
